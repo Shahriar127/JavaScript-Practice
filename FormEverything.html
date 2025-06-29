@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Comprehensive Form Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+    .strength {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Comprehensive Form Example</h2>
+  <form id="mainForm">
+    <!-- Mandatory Textbox -->
+    <label>Full Name (required):</label><br>
+    <input type="text" id="fullName" required><br><br>
+
+    <!-- Only Characters -->
+    <label>Username (only letters):</label><br>
+    <input type="text" id="onlyCharacters"><br><br>
+
+    <!-- Alphanumeric -->
+    <label>User ID (alphanumeric):</label><br>
+    <input type="text" id="alphanumeric"><br><br>
+
+    <!-- Numeric -->
+    <label>Age (numeric):</label><br>
+    <input type="text" id="justNumeric"><br><br>
+
+    <!-- Date of Birth and Age Check -->
+    <label>Date of Birth (must be over 18):</label><br>
+    <input type="date" id="dob"><br>
+    <div class="error" id="dobError"></div><br>
+
+    <!-- Email Validation -->
+    <label>Email:</label><br>
+    <input type="email" id="email"><br>
+    <div class="error" id="emailError"></div><br>
+
+    <!-- Mobile Number with Input Masking -->
+    <label>Mobile Number:</label><br>
+    <input type="text" id="mobileNumber" maxlength="10"><br>
+    <div class="error" id="mobileError"></div><br>
+
+    <!-- Phone Number Formatting -->
+    <label>Phone Number (auto format):</label><br>
+    <input type="text" id="phoneNumber" maxlength="12"><br><br>
+
+    <!-- Password and Confirm Password -->
+    <label>Password:</label><br>
+    <input type="password" id="password"><button type="button" id="togglePassword">Show</button><br>
+    <div id="strength" class="strength"></div><br>
+
+    <label>Confirm Password:</label><br>
+    <input type="password" id="confirmPassword"><br>
+    <div class="error" id="confirmError"></div><br>
+
+    <!-- Radio Buttons -->
+    <label>Gender:</label><br>
+    <input type="radio" name="gender" value="Male"> Male
+    <input type="radio" name="gender" value="Female"> Female<br><br>
+
+    <!-- Checkbox -->
+    <label>
+      <input type="checkbox" id="agreeCheckbox"> I agree to terms
+    </label><br><br>
+
+    <!-- Dropdown -->
+    <label>Country:</label><br>
+    <select id="country">
+      <option value="">--Select--</option>
+      <option>USA</option>
+      <option>Canada</option>
+      <option>UK</option>
+    </select><br><br>
+
+    <!-- Textarea with max limit and counter -->
+    <label>Bio (max 100 characters):</label><br>
+    <textarea id="bio" maxlength="100"></textarea><br>
+    <span id="charCount">0/100</span><br><br>
+
+    <button type="submit" id="submitBtn" disabled>Submit</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('mainForm');
+    const fullName = document.getElementById('fullName');
+    const onlyCharacters = document.getElementById('onlyCharacters');
+    const alphanumeric = document.getElementById('alphanumeric');
+    const justNumeric = document.getElementById('justNumeric');
+    const dob = document.getElementById('dob');
+    const dobError = document.getElementById('dobError');
+    const email = document.getElementById('email');
+    const emailError = document.getElementById('emailError');
+    const mobileNumber = document.getElementById('mobileNumber');
+    const mobileError = document.getElementById('mobileError');
+    const phoneNumber = document.getElementById('phoneNumber');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const confirmError = document.getElementById('confirmError');
+    const togglePassword = document.getElementById('togglePassword');
+    const strength = document.getElementById('strength');
+    const agreeCheckbox = document.getElementById('agreeCheckbox');
+    const country = document.getElementById('country');
+    const submitBtn = document.getElementById('submitBtn');
+    const bio = document.getElementById('bio');
+    const charCount = document.getElementById('charCount');
+
+    // Enable/Disable submit button
+    form.addEventListener('input', function() {
+      if (
+        fullName.value.trim() &&
+        email.validity.valid &&
+        password.value.length >= 6 &&
+        confirmPassword.value === password.value &&
+        agreeCheckbox.checked &&
+        country.value
+      ) {
+        submitBtn.disabled = false;
+      } else {
+        submitBtn.disabled = true;
+      }
+    });
+
+    // Only characters input
+    onlyCharacters.addEventListener('input', () => {
+      onlyCharacters.value = onlyCharacters.value.replace(/[^a-zA-Z]/g, '');
+    });
+
+    // Alphanumeric input
+    alphanumeric.addEventListener('input', () => {
+      alphanumeric.value = alphanumeric.value.replace(/[^a-zA-Z0-9]/g, '');
+    });
+
+    // Numeric input
+    justNumeric.addEventListener('input', () => {
+      justNumeric.value = justNumeric.value.replace(/[^0-9]/g, '');
+    });
+
+    // DOB Age Check
+    dob.addEventListener('change', () => {
+      const birthDate = new Date(dob.value);
+      const age = new Date().getFullYear() - birthDate.getFullYear();
+      dobError.textContent = age < 18 ? 'Must be at least 18 years old.' : '';
+    });
+
+    // Email Validation
+    email.addEventListener('input', () => {
+      emailError.textContent = email.validity.valid ? '' : 'Invalid email.';
+    });
+
+    // Mobile Number Validation
+    mobileNumber.addEventListener('input', () => {
+      mobileNumber.value = mobileNumber.value.replace(/[^0-9]/g, '');
+      mobileError.textContent = mobileNumber.value.length === 10 ? '' : 'Must be 10 digits.';
+    });
+
+    // Phone Number Formatting
+    phoneNumber.addEventListener('input', () => {
+      phoneNumber.value = phoneNumber.value
+        .replace(/\D/g, '')
+        .replace(/(\d{3})(\d{3})(\d{0,4})/, (_, p1, p2, p3) =>
+          [p1, p2, p3].filter(Boolean).join('-')
+        );
+    });
+
+    // Password Strength
+    password.addEventListener('input', () => {
+      const val = password.value;
+      let msg = 'Weak';
+      if (val.length >= 8 && /[A-Z]/.test(val) && /\d/.test(val)) {
+        msg = 'Strong';
+      } else if (val.length >= 6) {
+        msg = 'Medium';
+      }
+      strength.textContent = `Strength: ${msg}`;
+    });
+
+    // Confirm Password Match
+    confirmPassword.addEventListener('input', () => {
+      confirmError.textContent = confirmPassword.value === password.value ? '' : 'Passwords do not match.';
+    });
+
+    // Show/Hide Password
+    togglePassword.addEventListener('click', () => {
+      if (password.type === 'password') {
+        password.type = 'text';
+        togglePassword.textContent = 'Hide';
+      } else {
+        password.type = 'password';
+        togglePassword.textContent = 'Show';
+      }
+    });
+
+    // Character Counter
+    bio.addEventListener('input', () => {
+      charCount.textContent = `${bio.value.length}/100`;
+    });
+
+    // Submit
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Form submitted successfully!');
+    });
+  </script>
+</body>
+</html>

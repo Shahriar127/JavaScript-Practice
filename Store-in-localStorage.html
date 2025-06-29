@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #welcome {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h2>Enter Your Name</h2>
+
+  <form id="nameForm">
+    <input type="text" id="nameInput" placeholder="Your name">
+    <button type="submit">Save</button>
+  </form>
+
+  <div id="welcome"></div>
+
+  <script>
+    const nameForm = document.getElementById('nameForm');
+    const nameInput = document.getElementById('nameInput');
+    const welcomeDiv = document.getElementById('welcome');
+
+    // Check if a name is stored already
+    const storedName = localStorage.getItem('userName');
+    if (storedName) {
+      welcomeDiv.textContent = `Welcome back, ${storedName}!`;
+    }
+
+    nameForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // prevent form from reloading page
+
+      const name = nameInput.value.trim();
+      if (name === "") {
+        alert("Please enter your name.");
+        return;
+      }
+
+      // Store name in localStorage
+      localStorage.setItem('userName', name);
+
+      // Show welcome message
+      welcomeDiv.textContent = `Welcome, ${name}!`;
+
+      // Optionally, clear input
+      nameInput.value = "";
+    });
+  </script>
+</body>
+</html>

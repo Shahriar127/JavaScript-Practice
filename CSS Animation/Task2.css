@@ -1,0 +1,13 @@
+img {
+    width: 250px;
+    height: 200px;
+    background-color: red;
+    position: relative;
+    animation-name: example;
+    animation-duration: 6s;
+  }
+  
+  @keyframes example {
+    0%  {background-color:yellow; left:0px; top:0px;}
+    100%  {background-color:blue; left:300px; top:490px;}
+  }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Change Background Color</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      transition: background-color 0.3s ease;
+    }
+    select {
+      padding: 5px;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h2>Select Background Color</h2>
+
+  <select id="colorPicker">
+    <option value="">-- Choose a color --</option>
+    <option value="white">White</option>
+    <option value="lightgray">Light Gray</option>
+    <option value="lightblue">Light Blue</option>
+    <option value="lightgreen">Light Green</option>
+    <option value="lightyellow">Light Yellow</option>
+    <option value="lightpink">Light Pink</option>
+    <option value="lavender">Lavender</option>
+  </select>
+
+  <script>
+    const colorPicker = document.getElementById('colorPicker');
+
+    colorPicker.addEventListener('change', function() {
+      const selectedColor = this.value;
+      if (selectedColor) {
+        document.body.style.backgroundColor = selectedColor;
+      } else {
+        // Optional: reset to default
+        document.body.style.backgroundColor = '';
+      }
+    });
+  </script>
+</body>
+</html>
